@@ -72,6 +72,10 @@
 #
 #               Panda3D::FFmpeg::p3ffmpeg
 #
+#   SoLoud    - Support for SoLoud audio output.
+#
+#               Panda3D::SoLoud::p3soloud_audio
+#
 #
 #   OpenAL    - Support for OpenAL audio output.
 #
@@ -125,7 +129,7 @@ set(_panda_components
   Direct Contrib Framework Egg
   Bullet ODE
   FFmpeg
-  OpenAL FMOD
+  OpenAL FMOD SoLoud
   OpenGL DX9 OpenGLES1 OpenGLES2
   Vision VRPN
 )

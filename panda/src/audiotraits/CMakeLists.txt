@@ -1,6 +1,6 @@
 if(NOT HAVE_AUDIO)
   return()
-elseif(NOT HAVE_FMODEX AND NOT HAVE_OPENAL)
+elseif(NOT HAVE_FMODEX AND NOT HAVE_OPENAL AND NOT HAVE_SOLOUD)
   message(SEND_ERROR
     "You must have an audio backend for audio support! Turn off HAVE_AUDIO to ignore this.")
 endif()
@@ -70,3 +70,33 @@ if(HAVE_OPENAL)
 
   export_targets(OpenAL NAMESPACE "Panda3D::OpenAL::" COMPONENT OpenALDevel)
 endif()
+
+
+if(HAVE_SOLOUD)
+  set(P3SOLOUD_HEADERS
+    config_soloudAudio.h
+    soloudAudioManager.h
+    soloudAudioSound.I soloudAudioSound.h
+  )
+
+  set(P3SOLOUD_SOURCES
+    config_soloudAudio.cxx soloudAudioManager.cxx soloudAudioSound.cxx
+  )
+
+
+  composite_sources(p3soloud_audio P3SOLOUD_SOURCES)
+  add_library(p3soloud_audio ${MODULE_TYPE} ${P3SOLOUD_HEADERS} ${P3SOLOUD_SOURCES})
+  set_target_properties(p3soloud_audio PROPERTIES DEFINE_SYMBOL BUILDING_SOLOUD_AUDIO)
+  target_link_libraries(p3soloud_audio panda PKG::SOLOUD)
+
+  install(TARGETS p3soloud_audio
+    EXPORT SoLoud COMPONENT SoLoud
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/panda3d
+    ARCHIVE COMPONENT SoLoudDevel)
+  install(FILES ${P3SOLOUD_HEADERS} COMPONENT SoLoudDevel DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/panda3d)
+
+  export_targets(SoLoud NAMESPACE "Panda3D::SoLoud::" COMPONENT SoLoudDevel)
+endif()
+
